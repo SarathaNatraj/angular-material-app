@@ -1,5 +1,5 @@
 # Stage 1: Build Angular App
-FROM node:latest as build
+FROM node:14.17-alpine AS build
 
 WORKDIR /app
 
@@ -9,23 +9,30 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the application
+# Copy Angular app files
 COPY . .
 
-# Build Angular app
-RUN npm run build --prod
+# Build the Angular app
+RUN npm run build -- --prod
 
-# Stage 2: Serve Angular App with Nginx
-FROM nginx:alpine
+# Stage 2: Serve Angular App with Node Server
+FROM node:14.17-alpine
 
-# Copy built app from previous stage
-COPY --from=build /app/dist/<your-angular-app-name> /usr/share/nginx/html
+# Set working directory
+WORKDIR /usr/src/app
 
-# Copy nginx configuration file
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy built Angular app from the build stage
+COPY --from=build /app/dist ./dist
 
-# Expose port 80
-EXPOSE 80
+# Install dependencies for Node.js server
+COPY package*.json ./
+RUN npm install --only=production
 
-# Start nginx server
-CMD ["nginx", "-g", "daemon off;"]
+# Copy Node.js server files
+COPY server.js ./
+
+# Expose port
+EXPOSE 3000
+
+# Command to run the Node.js server
+CMD ["node", "server.js"]
