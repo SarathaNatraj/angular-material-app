@@ -1,0 +1,41 @@
+<p>User Profile works!</p>
+<h4>User Profile  - Material Design Forms</h4>
+
+  
+  <div class="container">
+    <mat-card>
+      <mat-card-header>
+        <mat-icon>person</mat-icon>
+        <mat-card-title class="mat-card-title">User Information</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form >
+          <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput placeholder="Enter your name" name="name" type="text">
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" placeholder="Enter your email" name="email">
+          </mat-form-field>
+
+          <h4>Basic mat-select</h4>
+<mat-form-field>
+  <mat-label>Favorite food</mat-label>
+  <mat-select>
+    @for (food of foods; track food) {
+      <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+
+
+
+
+          <button mat-raised-button color="primary">Submit</button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  
